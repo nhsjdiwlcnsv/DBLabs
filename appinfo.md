@@ -95,47 +95,41 @@ Describes general user entity. Contains the following fields:
 Describes all the medical data of a single patient thus creating a **One-to-One** relation
 to Patient.
 Contains the following fields:
-1. `patient (One-to-One)`. Patient to whom the card belongs. One card can only be assigned to one patient. 
-2. `description (char)`. Card's brief description. Content is determined by a doctor (*max. 1000 characters*).
-3. `birth_date (datetime)`. Patient's date of birth (*Jan. 1st, 1900 - Current date*).
-4. `height (float)`. Patient's height (*max. 3 m*).
-5. `weight (float)`. Patient's weight (*max. 1000 kg*).
-6. `blood (Foreign Key)`. Patient's blood info. Refers to `Blood` entity.
-7. `donot (bool)`. True if patient is a donor, false otherwise.
+1. `patient (One-to-One)` – Patient to whom the card belongs. One card can only be assigned to one patient. 
+2. `description (char)` – Card's brief description. Content is determined by a doctor (*max. 1000 characters*).
+3. `birth_date (datetime)` – Patient's date of birth (*Jan. 1st, 1900 - Current date*).
+4. `height (float)` – Patient's height (*max. 3 m*).
+5. `weight (float)` – Patient's weight (*max. 1000 kg*).
+6. `blood (Foreign Key)` – Patient's blood info. Refers to `Blood` entity.
+7. `donot (bool)` – True if patient is a donor, false otherwise.
 
 #### Blood 
 Presents information about patient's blood. Contains the following fields:
-1. `type (Foreign Key)`. Blood type.
-2. `contaminated (bool).` Whether blood is contaminated.
+1. `type (Foreign Key)` – Blood type.
+2. `contaminated (bool)` – Whether blood is contaminated.
 
 #### Blood type
 Describes blood type. Contains the following fields:
-1. `name (char)`. Name of the blood type. Can either be A+, A-, B+, B-, AB+, AB-, O+, O- (*max. 3 characters*).
+1. `name (char)` – Name of the blood type. Can either be A+, A-, B+, B-, AB+, AB-, O+, O- (*max. 3 characters*).
 
 #### Building
 Presents information about a single building of the bank. Contains the following fields:
-1. `address (char)`. Full & unique address of the building (*max. 64 characters*).
-2. `name (char)`. If present – name of the building (*max. 64 characters*).
+1. `address (char)` – Full & unique address of the building (*max. 64 characters*).
+2. `name (char)` – If present – name of the building (*max. 64 characters*).
 
 #### Room
 Presents information about a room in the building of the bank. Contains the following fields:
-1. `building (Foreign Key)`. A building in which the room is located.
-2. `number (int)`. Number of the room (*max. 999*).
+1. `building (Foreign Key)` – A building in which the room is located.
+2. `number (int)` – Number of the room (*max. 999*).
 
 #### Action type
 Describes action type. Contains the following fields:
-1. `name (char)`. Name of the action type (*max. 64 characters*).
+1. `name (char)` – Name of the action type (*max. 64 characters*).
 
 #### Action 
 Describes a single action in the log journal. Contains the following fields:
-1. `id (int)`. Unique identifier of the action.
-2. `object (Foreign Key).` User (creates the action). 
-3. `subject (Foreign Key).` User (towards whom the action is directed). 
-4. `type (Foreign Key).` Type of the action. Refers to `Action type` entity.
-5. `time (datetime).` Date & time when action was carried out (*Jan. 1st 1900 – Current date*).
-
-#### Journal
-Describes a journal that logs actions. Contains the following fields:
-1. `id (int)`. Unique identifier of the journal.
-2. `title (char).` Title of the journal (*max. 64 characters*). 
-3. `action (Foreign Key).` Action from the `Action` model. 
+1. `id (int)` – Unique identifier of the action.
+2. `object (Foreign Key)` – User (creates the action). 
+3. `subject (Foreign Key)` – User (towards whom the action is directed). 
+4. `type (Foreign Key)` – Type of the action. Refers to `Action type` entity.
+5. `time (datetime)` – Date & time when action was carried out (*Jan. 1st 1900 – Current date*).
