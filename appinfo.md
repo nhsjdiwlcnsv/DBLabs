@@ -27,7 +27,7 @@ Authenticated user can either be a **patient**, a **doctor (staff member)**, or 
 5. Make announcements
 
 #### Admin can
-1. Manage (delete, update info, etc.) staff members
+1. Manage (delete, update info, etc.) patients
 2. Carry out doctor's responsibilities
 3. View the logs journal
 4. Alter the logs
