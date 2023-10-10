@@ -1,0 +1,12 @@
+insert into building (building_id, address, name) values (1, '14552 Claremont Park', 'Artisan');
+insert into building (building_id, address, name) values (2, '45194 Coolidge Junction', 'Barby');
+insert into building (building_id, address, name) values (3, '5605 Grayhawk Circle', 'Waywood');
+insert into building (building_id, address, name) values (4, '37 Springview Terrace', null);
+insert into building (building_id, address, name) values (5, '6658 Northland Avenue', 'Morningstar');
+insert into building (building_id, address, name) values (6, '71 Eliot Point', null);
+insert into building (building_id, address, name) values (7, '73453 Farmco Street', 'Rowland');
+insert into building (building_id, address, name) values (8, '49917 Ridge Oak Court', 'Huxley');
+insert into building (building_id, address, name) values (9, '833 Laurel Pass', 'Golf Course');
+insert into building (building_id, address, name) values (10, '4791 Kedzie Plaza', 'Helena');
+insert into building (building_id, address, name) values (11, '31 Mccormick Avenue', 'Iowa');
+insert into building (building_id, address, name) values (12, '6409 Nancy Trail', 'Hazelcrest');

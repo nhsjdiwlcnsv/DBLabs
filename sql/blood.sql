@@ -1,0 +1,16 @@
+insert into blood (blood_id, type, contaminated) values (1, 'A+', false);
+insert into blood (blood_id, type, contaminated) values (2, 'A-', false);
+insert into blood (blood_id, type, contaminated) values (3, 'B+', false);
+insert into blood (blood_id, type, contaminated) values (4, 'B-', false);
+insert into blood (blood_id, type, contaminated) values (5, 'O+', false);
+insert into blood (blood_id, type, contaminated) values (6, 'O-', false);
+insert into blood (blood_id, type, contaminated) values (7, 'AB+', false);
+insert into blood (blood_id, type, contaminated) values (8, 'AB-', false);
+insert into blood (blood_id, type, contaminated) values (9, 'A+', true);
+insert into blood (blood_id, type, contaminated) values (10, 'A-', true);
+insert into blood (blood_id, type, contaminated) values (11, 'B+', true);
+insert into blood (blood_id, type, contaminated) values (12, 'B-', true);
+insert into blood (blood_id, type, contaminated) values (13, 'O+', true);
+insert into blood (blood_id, type, contaminated) values (14, 'O-', true);
+insert into blood (blood_id, type, contaminated) values (15, 'AB+', true);
+insert into blood (blood_id, type, contaminated) values (16, 'AB-', true);
