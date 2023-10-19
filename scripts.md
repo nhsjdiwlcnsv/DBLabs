@@ -63,7 +63,8 @@ CREATE TABLE staff_status
 
 CREATE TABLE staff
 (
-    email varchar(64) PRIMARY KEY,
+    staff_id integer PRIMARY KEY,
+    email varchar(64) UNIQUE,
     password varchar(32) NOT NULL UNIQUE,
     first_name varchar(64) NOT NULL,
     last_name varchar(64) NOT NULL,
@@ -71,8 +72,12 @@ CREATE TABLE staff
     status varchar(64),
 
     CONSTRAINT min_password_length CHECK ( char_length(password) >= 8 ),
-    CONSTRAINT phone_length CHECK ( char_length(phone) >= 12 ),
-    CONSTRAINT fk_staff_status FOREIGN KEY (status) REFERENCES staff_status(name) ON DELETE SET NULL
+    CONSTRAINT phone_length CHECK ( char_length(phone) == 10 ),
+    CONSTRAINT fk_staff_status FOREIGN KEY (status) REFERENCES staff_status(name) ON DELETE SET NULL,
+    CONSTRAINT email_or_phone CHECK (
+        CASE WHEN email IS NULL THEN 0 ELSE 1 END +
+        CASE WHEN phone IS NULL THEN 0 ELSE 1 END >= 1
+    )
 );
 ```
 
@@ -82,7 +87,8 @@ CREATE TABLE staff
 ```postgresql
 CREATE TABLE patient
 (
-    email varchar(64) PRIMARY KEY,
+    patient_id integer PRIMARY KEY,
+    email varchar(64) UNIQUE,
     username varchar(32) UNIQUE,
     password varchar(32) NOT NULL UNIQUE,
     first_name varchar(64) NOT NULL,
@@ -90,7 +96,11 @@ CREATE TABLE patient
     phone varchar(12) UNIQUE,
 
     CONSTRAINT min_password_length CHECK ( char_length(password) >= 8 ),
-    CONSTRAINT phone_length CHECK ( char_length(phone) >= 12 )
+    CONSTRAINT phone_length CHECK ( char_length(phone) == 10 ),
+    CONSTRAINT email_or_phone CHECK (
+        CASE WHEN email IS NULL THEN 0 ELSE 1 END +
+        CASE WHEN phone IS NULL THEN 0 ELSE 1 END >= 1
+    )
 );
 
 CREATE TABLE health_card

@@ -1,17 +1,18 @@
-DROP TABLE IF EXISTS room; -- OK
-DROP TABLE IF EXISTS building; -- OK
-DROP TABLE IF EXISTS blood; -- OK
-DROP TABLE IF EXISTS blood_type; -- OK
-DROP TABLE IF EXISTS staff; -- OK
-DROP TABLE IF EXISTS staff_status; -- OK
-DROP TABLE IF EXISTS patient; -- OK
-DROP TABLE IF EXISTS health_card; -- TODO
-DROP TABLE IF EXISTS appointment; -- TODO
-DROP TABLE IF EXISTS appointment_type; -- TODO
-DROP TABLE IF EXISTS bill; -- TODO
-DROP TABLE IF EXISTS announcement; -- TODO
-DROP TABLE IF EXISTS action; -- TODO
-DROP TABLE IF EXISTS action_type; -- OK
+DROP TABLE IF EXISTS bill;
+DROP TABLE IF EXISTS announcement;
+DROP TABLE IF EXISTS appointment;
+DROP TABLE IF EXISTS appointment_type;
+DROP TABLE IF EXISTS action;
+DROP TABLE IF EXISTS action_type;
+DROP TABLE IF EXISTS staff;
+DROP TABLE IF EXISTS staff_status;
+DROP TABLE IF EXISTS health_card;
+DROP TABLE IF EXISTS patient;
+DROP TABLE IF EXISTS room;
+DROP TABLE IF EXISTS building;
+DROP TABLE IF EXISTS blood;
+DROP TABLE IF EXISTS blood_type;
+
 
 
 CREATE TABLE building
@@ -54,42 +55,52 @@ CREATE TABLE staff_status
 
 CREATE TABLE staff
 (
-    email varchar(64) PRIMARY KEY,
+    staff_id integer PRIMARY KEY,
+    email varchar(64) UNIQUE,
     password varchar(32) NOT NULL UNIQUE,
     first_name varchar(64) NOT NULL,
     last_name varchar(64) NOT NULL,
-    phone varchar(12) UNIQUE,
+    phone varchar(10) UNIQUE,
     status varchar(64),
 
     CONSTRAINT min_password_length CHECK ( char_length(password) >= 8 ),
-    CONSTRAINT phone_length CHECK ( char_length(phone) >= 12 ),
-    CONSTRAINT fk_staff_status FOREIGN KEY (status) REFERENCES staff_status(name) ON DELETE SET NULL
+    CONSTRAINT phone_length CHECK ( char_length(phone) = 10 ),
+    CONSTRAINT fk_staff_status FOREIGN KEY (status) REFERENCES staff_status(name) ON DELETE SET NULL,
+    CONSTRAINT email_or_phone CHECK (
+        CASE WHEN email IS NULL THEN 0 ELSE 1 END +
+        CASE WHEN phone IS NULL THEN 0 ELSE 1 END >= 1
+    )
 );
 
 CREATE TABLE patient
 (
-    email varchar(64) PRIMARY KEY,
+    patient_id integer PRIMARY KEY,
+    email varchar(64) UNIQUE,
     username varchar(32) UNIQUE,
     password varchar(32) NOT NULL UNIQUE,
     first_name varchar(64) NOT NULL,
     last_name varchar(64) NOT NULL,
-    phone varchar(12) UNIQUE,
+    phone varchar(10) UNIQUE,
 
     CONSTRAINT min_password_length CHECK ( char_length(password) >= 8 ),
-    CONSTRAINT phone_length CHECK ( char_length(phone) >= 12 )
+    CONSTRAINT phone_length CHECK ( char_length(phone) = 10 ),
+    CONSTRAINT email_or_phone CHECK (
+        CASE WHEN email IS NULL THEN 0 ELSE 1 END +
+        CASE WHEN phone IS NULL THEN 0 ELSE 1 END >= 1
+    )
 );
 
 CREATE TABLE health_card
 (
     health_card_id integer PRIMARY KEY,
-    patient varchar(64) UNIQUE NOT NULL,
+    patient integer UNIQUE NOT NULL,
     description text,
     birth_date timestamp NOT NULL,
     height float4 NOT NULL,
     weight float4 NOT NULL,
     blood smallint,
 
-    CONSTRAINT fk_patient FOREIGN KEY (patient) REFERENCES patient(email) ON DELETE CASCADE,
+    CONSTRAINT fk_patient FOREIGN KEY (patient) REFERENCES patient(patient_id) ON DELETE CASCADE,
     CONSTRAINT fk_blood FOREIGN KEY (blood) REFERENCES blood(blood_id) ON DELETE SET NULL
 );
 
@@ -102,26 +113,26 @@ CREATE TABLE appointment
 (
     appointment_id integer PRIMARY KEY,
     type varchar(32) NOT NULL DEFAULT 'Unspecified',
-    patient varchar(64),
-    doctor varchar(64),
+    patient integer,
+    doctor integer,
     time timestamp NOT NULL,
     room integer NOT NULL,
     description text,
 
     CONSTRAINT fk_type FOREIGN KEY (type) REFERENCES appointment_type(name) ON DELETE SET DEFAULT,
-    CONSTRAINT fk_patient FOREIGN KEY (patient) REFERENCES patient(email) ON DELETE SET NULL,
-    CONSTRAINT fk_doctor FOREIGN KEY (doctor) REFERENCES staff(email) ON DELETE SET NULL
+    CONSTRAINT fk_patient FOREIGN KEY (patient) REFERENCES patient(patient_id) ON DELETE SET NULL,
+    CONSTRAINT fk_doctor FOREIGN KEY (doctor) REFERENCES staff(staff_id) ON DELETE SET NULL
 );
 
 CREATE TABLE bill
 (
     bill_id integer PRIMARY KEY,
-    issuer varchar(64),
-    receiver varchar(64),
+    issuer integer,
+    receiver integer,
     amount float8 NOT NULL,
 
-    CONSTRAINT fk_issuer FOREIGN KEY (issuer) REFERENCES staff(email) ON DELETE SET NULL,
-    CONSTRAINT fk_receiver FOREIGN KEY (receiver) REFERENCES patient(email) ON DELETE SET NULL
+    CONSTRAINT fk_issuer FOREIGN KEY (issuer) REFERENCES staff(staff_id) ON DELETE SET NULL,
+    CONSTRAINT fk_receiver FOREIGN KEY (receiver) REFERENCES patient(patient_id) ON DELETE SET NULL
 );
 
 CREATE TABLE announcement
@@ -129,9 +140,9 @@ CREATE TABLE announcement
     announcement_id integer PRIMARY KEY,
     title varchar(128) NOT NULL,
     description text,
-    author varchar(64) NOT NULL,
+    author integer NOT NULL,
 
-    CONSTRAINT fk_author FOREIGN KEY (author) REFERENCES staff(email) ON DELETE SET DEFAULT
+    CONSTRAINT fk_author FOREIGN KEY (author) REFERENCES staff(staff_id) ON DELETE SET DEFAULT
 );
 
 CREATE TABLE action_type
@@ -145,17 +156,17 @@ CREATE TABLE action
 (
     action_id integer PRIMARY KEY,
     type varchar(32) NOT NULL,
-    patient_subject varchar(64),
-    patient_object varchar(64),
-    staff_subject varchar(64),
-    staff_object varchar(64),
+    patient_subject integer,
+    patient_object integer,
+    staff_subject integer,
+    staff_object integer,
     time timestamp NOT NULL,
 
     CONSTRAINT fk_action_type FOREIGN KEY (type) REFERENCES action_type(name) ON DELETE SET NULL,
-    CONSTRAINT fk_patient_subject FOREIGN KEY (patient_subject) REFERENCES patient(email) ON DELETE SET NULL,
-    CONSTRAINT fk_patient_object FOREIGN KEY (patient_object) REFERENCES patient(email) ON DELETE SET NULL,
-    CONSTRAINT fk_doctor_subject FOREIGN KEY (staff_subject) REFERENCES staff(email) ON DELETE SET NULL,
-    CONSTRAINT fk_doctor_object FOREIGN KEY (staff_object) REFERENCES staff(email) ON DELETE SET NULL,
+    CONSTRAINT fk_patient_subject FOREIGN KEY (patient_subject) REFERENCES patient(patient_id) ON DELETE SET NULL,
+    CONSTRAINT fk_patient_object FOREIGN KEY (patient_object) REFERENCES patient(patient_id) ON DELETE SET NULL,
+    CONSTRAINT fk_doctor_subject FOREIGN KEY (staff_subject) REFERENCES staff(staff_id) ON DELETE SET NULL,
+    CONSTRAINT fk_doctor_object FOREIGN KEY (staff_object) REFERENCES staff(staff_id) ON DELETE SET NULL,
 
     CONSTRAINT le_one_patient CHECK (
         CASE WHEN patient_subject is NULL THEN 0 ELSE 1 END +
@@ -174,4 +185,3 @@ CREATE TABLE action
         CASE WHEN staff_object is NULL THEN 0 ELSE 1 END <= 1
     )
 );
-
