@@ -68,7 +68,7 @@ ORDER BY time DESC
 LIMIT 10;
 
 ------------------------------- NUMBER OF RECENT APPOINTMENTS PER DAY -----------------------------
-SELECT time, COUNT(*)
+SELECT time, COUNT(*) AS appointments_number
 FROM appointment
 WHERE time > '10-01-2023'
 GROUP BY time
