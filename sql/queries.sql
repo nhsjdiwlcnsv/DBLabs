@@ -1,12 +1,11 @@
------------------------------------------ BLOOD TYPE ----------------------------------------
--- Health cards with not contaminated and contaminated blood
+------------------ HEALTH CARDS WITH UNCONTAMINATED AND CONTAMINATED BLOOD ------------------
 SELECT description FROM health_card WHERE blood < 9;
 SELECT description FROM health_card WHERE blood >= 9;
 
--- Average stats of patients with O+, O-, A+, A- blood types:
+------------------- AVG STATS OF PATIENTS WITH O+, O-, A+, A- BLOOD TYPES -------------------
 SELECT AVG(weight), AVG(height) FROM health_card WHERE blood in (1, 2, 5, 6, 9, 10, 13, 14);
 
--- Average stats of patients with B+, B-, AB+, AB- blood types:
+------------------ AVG STATS OF PATIENTS WITH B+, B-, AB+, AB- BLOOD TYPES ------------------
 SELECT AVG(weight), AVG(height) FROM health_card WHERE blood in (3, 4, 7, 8, 11, 12, 15, 16);
 
 ------------------------------ ROOMS NOT HIGHER THEN 4TH FLOOR ------------------------------
@@ -81,7 +80,6 @@ GROUP BY issuer
 ORDER BY issuer;
 
 ----------------------------------- THE MOST COMMON HEIGHT ----------------------------------
-
 SELECT height, COUNT(*) as count
 FROM health_card
 GROUP BY height
@@ -151,7 +149,7 @@ WHERE EXISTS
 (SELECT first_name FROM patient WHERE patient.first_name = staff.first_name);
 
 ---------------------------- INSERT INTO SELECT SYNTHETIC EXAMPLE ---------------------------
-INSERT INTO staff (staff_id, email, password, first_name, last_name, phone)
+EXPLAIN INSERT INTO staff (staff_id, email, password, first_name, last_name, phone)
 SELECT
     patient_id,
     email,
@@ -166,4 +164,11 @@ FROM (
 WHERE
     pdata.birth_date > '01-01-2004'
     AND pdata.patient_id > 120
-    AND NOT EXISTS (SELECT appointment_id FROM appointment WHERE appointment.patient = pdata.patient_id)
+    AND NOT EXISTS (SELECT appointment_id FROM appointment WHERE appointment.patient = pdata.patient_id);
+
+--------------------------- TOTAL AMOUNT OF MONEY PAID TO A DOCTOR --------------------------
+SELECT
+    issuer,
+    amount,
+    SUM(amount) OVER (PARTITION BY issuer) AS total_amount
+FROM bill;
