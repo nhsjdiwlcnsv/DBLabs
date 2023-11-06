@@ -154,7 +154,7 @@ CREATE TABLE action_type
 
 CREATE TABLE action
 (
-    action_id integer PRIMARY KEY,
+    action_id serial8 PRIMARY KEY,
     type varchar(32) NOT NULL,
     patient_subject integer,
     patient_object integer,
