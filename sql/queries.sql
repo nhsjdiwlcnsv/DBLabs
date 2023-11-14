@@ -119,15 +119,6 @@ GROUP BY a.room
 HAVING AVG(h.height) < 185
 ORDER BY COUNT(h.patient);
 
--- ABOBA --
-SELECT
-    p.patient_id,
-    CONCAT(p.first_name, ' ', p.last_name) AS full_name,
-    a.room
-FROM patient p
-LEFT JOIN appointment a ON a.patient = p.patient_id
-ORDER BY patient_id;
-
 ----------------------------------------- ALL USERS -----------------------------------------
 SELECT patient_id,
        username AS username_or_status,

@@ -92,17 +92,24 @@ CREATE TABLE patient
 
 CREATE TABLE health_card
 (
-    health_card_id integer PRIMARY KEY,
+    health_card_id serial PRIMARY KEY,
     patient integer UNIQUE NOT NULL,
     description text,
-    birth_date timestamp NOT NULL,
-    height float4 NOT NULL,
-    weight float4 NOT NULL,
+    birth_date timestamp,
+    height float4,
+    weight float4,
     blood smallint,
 
     CONSTRAINT fk_patient FOREIGN KEY (patient) REFERENCES patient(patient_id) ON DELETE CASCADE,
     CONSTRAINT fk_blood FOREIGN KEY (blood) REFERENCES blood(blood_id) ON DELETE SET NULL
 );
+
+ALTER TABLE health_card
+ADD bmi float4;
+
+ALTER TABLE health_card
+ADD full_name text;
+
 
 CREATE TABLE appointment_type
 (
@@ -126,7 +133,7 @@ CREATE TABLE appointment
 
 CREATE TABLE bill
 (
-    bill_id integer PRIMARY KEY,
+    bill_id serial PRIMARY KEY,
     issuer integer,
     receiver integer,
     amount float8 NOT NULL,
