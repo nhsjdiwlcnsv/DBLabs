@@ -21,3 +21,41 @@ AS
         END;
     $$
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE update_announcement(
+    id integer,
+    new_title text,
+    new_desc text
+)
+AS
+    $$
+        BEGIN
+            UPDATE announcement
+            SET
+                title = COALESCE(new_title, title),
+                description = COALESCE(new_desc, description)
+            WHERE announcement_id = id;
+            COMMIT;
+        END;
+    $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE update_appointment(
+    id integer,
+    new_desc text,
+    new_room integer,
+    new_time timestamp without time zone
+)
+AS
+    $$
+        BEGIN
+            UPDATE appointment
+            SET
+                description = COALESCE(new_desc, description),
+                room = COALESCE(new_room, room),
+                time = COALESCE(new_time, time)
+            WHERE appointment_id = id;
+            COMMIT;
+        END;
+    $$
+LANGUAGE plpgsql;
