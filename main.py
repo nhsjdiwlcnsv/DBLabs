@@ -17,7 +17,10 @@ def main():
     user = bloodbank.user.User(terminal)
 
     while True:
-        user.interact()
+        try:
+            user.interact()
+        except KeyboardInterrupt:
+            break
 
 
 if __name__ == '__main__':

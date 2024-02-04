@@ -55,7 +55,7 @@ AS
                 room = COALESCE(new_room, room),
                 time = COALESCE(new_time, time)
             WHERE appointment_id = id;
-            COMMIT;
+--             COMMIT;
         END;
     $$
 LANGUAGE plpgsql;
